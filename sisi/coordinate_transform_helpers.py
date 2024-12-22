@@ -8,6 +8,11 @@ Created on Fri Dec 20 08:45:47 2024
 import numpy as np
 import matplotlib.pyplot
 
+class PSF():
+    def __init__(self, xy, PSF_discreet):
+        self.xy = xy
+        self.PSF_discreet = PSF_discreet
+
 class AtomPlane():
     def __init__(self, fov, spacing, origin=(0,0)):
         self.fov = float(fov)

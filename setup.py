@@ -2,7 +2,7 @@
 """
 Created on Sun Dec 22 21:10:20 2024
 
-@author: scott
+@author: Scott Hubele
 """
 
 from setuptools import setup, find_packages
