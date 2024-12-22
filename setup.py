@@ -9,17 +9,16 @@ from setuptools import setup, find_packages
 
 VERSION = '0.0.1' 
 DESCRIPTION = 'Simulations and analysis of images from K39 quantum gas microscope'
-LONG_DESCRIPTION = ''
 
 # Setting up
 setup(
        # the name must match the folder name 'verysimplemodule'
-        name="singlesite", 
+        name="sisi", 
         version=VERSION,
         author="Scott Hubele",
+        url='git@github.com:las-m/SingleSiteImaging.git',
         author_email="<scott.hubele@uni-hamburg.de>",
         description=DESCRIPTION,
-        long_description=LONG_DESCRIPTION,
         packages=find_packages(),
         install_requires=[]
 )
