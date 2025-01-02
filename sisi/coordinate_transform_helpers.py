@@ -69,32 +69,32 @@ class PSF():
         self.PSF_discreet = PSF_discreet
 
 class AtomPlane():
-    def __init__(self, fov, spacing, origin=(0,0)):
-        self.fov = float(fov)
+    def __init__(self, size, spacing, origin=(0,0)):
+        self.size = size
         self.spacing = float(spacing)
         if len(origin)==2:
             self.origin=(float(origin[0]),float(origin[1]))
         else:
             raise ValueError("Origin must be (x,y) format")
+
+    def getCoordinates(self):
+        pass
+    
+    def genDistribution(self):
+        pass
             
 class ImagingPlane():
     def __init__(self, magnification, pixel_size, origin=(0,0), centered="origin"):
         self.magnification=magnification
-        if centered == "corners":    
-            self.centered = "corners"
-        elif centered == "origin":
-            self.centered = "origin"
-        else:
-            raise ValueError("""Must be either "corners"-centered or "origin"-centered""")
         if len(origin)==2:
             self.origin=(float(origin[0]),float(origin[1]))
         else:
             raise ValueError("Origin must be (x,y) format")
     
 class Experiment():
-    def __init__(self, AtomPlane=None, *ImagingPlanes):
+    def __init__(self, AtomPlane=None, *imaging_planes):
         self.AtomPlane = AtomPlane
-        self.ImagingPlanes = [*ImagingPlanes]
+        self.ImagingPlanes = [gen_imaging_plane(imaging_plane) for imaging_plane in imaging_planes]
         
     def addImagingPlane(self, imaging_plane=None, **kwargs):
         self.ImagingPlanes+=[gen_imaging_plane(imaging_plane, **kwargs)]
@@ -102,3 +102,8 @@ class Experiment():
     def setAtomPlaneParams(self, atom_plane=None, **kwargs):
         self.AtomPlane = gen_atom_plane(atom_plane, **kwargs)
         
+    def sampleImages(self, n, save=False):
+        if save:
+            print("Saving not implemented yet.")
+        for i in range(n):
+            pass
