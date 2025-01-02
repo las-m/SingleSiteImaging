@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from scipy.ndimage import zoom
 from sisi import quantum_emitters
 from scipy.integrate import dblquad
+import scipy.stats
 import pickle
 
 def open_sim(fname):
@@ -265,6 +266,10 @@ class ImagingPlane():
             x, y = np.unravel_index(idx, self.n_pixels)
             image[x, y] += 1
         return image
+    
+    def sampleNoise(self, mu):
+        pdist = scipy.stats.poisson(mu=mu)
+        return pdist.rvs(size=self.n_pixels)
         
 class Experiment(Lattice):
     def __init__(self, n_sites = None, spacing = None, **kwargs):
@@ -279,7 +284,7 @@ class Experiment(Lattice):
         for imaging_plane in self.imaging_planes:
             imaging_plane.updatePSFList(self.coords[0], self.coords[1])
         
-    def sampleImages(self, n, filling=1, save=False, plot=False, snr_inf=False):
+    def sampleImages(self, n, filling=1, save=False, plot=False, snr_inf=False, noise=True):
         if save:
             print("Saving not implemented yet.")
         for i in range(n):
@@ -293,10 +298,12 @@ class Experiment(Lattice):
                         else:
                             n_photons = self.emitter.sample_counts()
                             img += imaging_plane.samplePSF(k, n_photons)
+                if noise and not snr_inf:
+                    img += imaging_plane.sampleNoise(3)
                 
                 if plot:
                     plt.figure()
-                    plt.imshow(img)
+                    plt.imshow(img, cmap='RdBu_r', vmax=10)
                     plt.colorbar()
                     plt.show()
                     
