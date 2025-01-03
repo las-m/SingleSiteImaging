@@ -6,8 +6,8 @@ Created on Sun Dec 22 20:58:01 2024
 """
 
 import add_path
-from sisi import sisisim
-import sisi.psf_functions
+from sisipy import sisisim
+import sisipy.psf_functions
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -18,7 +18,7 @@ n_sites = 50 # n x n sites
 magnification = 50
 n_pixels = 200
 pixel_size = 6.5e-6
-psf_func = sisi.psf_functions.gaussian_2d
+psf_func = sisipy.psf_functions.gaussian_2d
 psf_params = [1, 313e-9, 313e-9] #amp, w_x, w_y
 
 atom_plane_params = {

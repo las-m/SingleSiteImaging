@@ -7,7 +7,7 @@ Created on Sun Dec 22 21:10:20 2024
 
 from setuptools import setup, find_packages
 
-VERSION = '0.0.2' 
+VERSION = '0.0.3' 
 DESCRIPTION = 'Simulations and analysis of images from K39 quantum gas microscope'
 
 # Setting up

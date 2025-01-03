@@ -6,7 +6,7 @@ Created on Sun Dec 22 20:58:01 2024
 """
 
 import add_path
-from sisi import sisisim
+from sisipy import sisisim
 import numpy as np
 import matplotlib.pyplot as plt
 
