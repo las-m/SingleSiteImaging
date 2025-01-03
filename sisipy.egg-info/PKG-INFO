@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
-Name: sisi
-Version: 0.0.2
+Name: sisipy
+Version: 0.0.3
 Summary: Simulations and analysis of images from K39 quantum gas microscope
 Home-page: git@github.com/las-m/SingleSiteImaging.git
 Author: Scott Hubele
