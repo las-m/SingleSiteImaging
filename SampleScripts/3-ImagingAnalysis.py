@@ -10,8 +10,8 @@ from sisi import sisisim
 import numpy as np
 import matplotlib.pyplot as plt
 
-setup = sisisim.open_sim("setup1.pkl")
+setup = sisisim.open_sim("setup50x50.pkl")
 
-setup.changeEmitter('poisson', mu=200)
+setup.changeEmitter('poisson', mu=10000)
 
-setup.sampleImages(1, plot=True, filling=0.1)
+setup.sampleImages(1, plot=True, filling=0.5)
