@@ -12,7 +12,6 @@ DESCRIPTION = 'Simulations and analysis of images from K39 quantum gas microscop
 
 # Setting up
 setup(
-       # the name must match the folder name 'verysimplemodule'
         name="sisipy", 
         version=VERSION,
         author="Scott Hubele",

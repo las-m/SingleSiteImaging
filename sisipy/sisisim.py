@@ -7,12 +7,13 @@ Created on Fri Dec 20 08:45:47 2024
 
 import numpy as np
 import matplotlib.pyplot as plt
+import imageio
 from tqdm import tqdm
-from scipy.ndimage import zoom
-from sisi import quantum_emitters
 from scipy.integrate import dblquad
 import scipy.stats
 import pickle
+
+from sisipy import quantum_emitters
 
 def open_sim(fname):
     with open(fname, "rb") as f:
@@ -177,7 +178,7 @@ class PSFSampler():
         return integral
     
 class ImagingPlane():
-    def __init__(self, n_pixels, pixel_size, magnification, psf, psf_params, extent=5e-6):
+    def __init__(self, n_pixels, pixel_size, magnification, psf, psf_params, angle=0, extent=5e-6):
         if len([n_pixels]) == 1:
             self.n_pixels = np.array([n_pixels]*2, dtype=int).flatten()
         elif len([n_pixels]) == 2:
@@ -189,6 +190,7 @@ class ImagingPlane():
         self.magnification = float(magnification)
         self.psf = PSFSampler(psf, psf_params, extent)
         self.psf_list = []
+        self.angle = float(angle)
         
     def pixelate(self, x_atom, y_atom):
         """
@@ -211,6 +213,10 @@ class ImagingPlane():
         psf_pixelated = np.zeros(self.n_pixels)
         
         in_bounds, on_edge = self.checkInBounds(x_atom, y_atom, check_on_edge=True)
+        
+        theta_rad = self.angle*2*np.pi/360
+        rot_mat = np.array([[np.cos(theta_rad), -np.sin(theta_rad)],[np.sin(theta_rad),np.cos(theta_rad)]])
+        x_atom, y_atom = np.matmul(rot_mat,np.array([x_atom, y_atom]))
         
         if in_bounds:
             for i in range(self.n_pixels[0]):
@@ -358,10 +364,9 @@ class Experiment(Lattice):
         for imaging_plane in self.imaging_planes:
             imaging_plane.updatePSFList(self.coords[0], self.coords[1])
         
-    def sampleImages(self, n, filling=1, save=False, plot=False, snr_inf=False, noise=True, **kwargs):
-        if save:
-            print("Saving not implemented yet.")
-        for i in range(n):
+    def sampleImages(self, n, filling=1, save=False, plot=False, snr_inf=False, noise=True, savename='test', **kwargs):
+        imgs = []
+        for i in tqdm(range(n), desc="Generating Images", unit='images'):
             atom_dist = self.genDistribution(filling).flatten()
             for imaging_plane in self.imaging_planes:
                 img = np.zeros(imaging_plane.n_pixels)
@@ -375,12 +380,16 @@ class Experiment(Lattice):
                                 img += imaging_plane.samplePSF(k, n_photons)
                 if noise and not snr_inf:
                     img += imaging_plane.sampleNoise(3)
-                
                 if plot:
                     plt.figure()
                     plt.imshow(img, cmap='RdBu_r', **kwargs)
                     plt.colorbar()
                     plt.show()
+                    
+            imgs.append(img)
+            
+            if save:
+                imageio.mimwrite('%s.tiff' %savename, imgs, format='TIFF')
                     
     def save(self, fname):
         with open("%s.pkl" %fname, "wb") as file:

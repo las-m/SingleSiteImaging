@@ -7,7 +7,8 @@ List of possible PSFs. Format should be:
     
     where xy = x,y are the coordinates in the atom-plane in meters.
 
-PSFs should have their center at (0,0)
+PSFs should have their center at (0,0). Total area under the curve is not important,
+as the PSFs are renormalized when using the sisisim module.
 
 @author: scott
 """

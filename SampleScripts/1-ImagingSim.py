@@ -25,13 +25,14 @@ atom_plane_params = {
     'n_sites'    : n_sites,
     'spacing'    : 1064e-9/np.sqrt(2),
     'pdist'      : 'poisson',
-    'mu'         : 10000
+    'mu'         : 200
     }
 
 imaging_plane_params = {
     'magnification' : magnification,
     'pixel_size'    : pixel_size,
     'n_pixels'      : n_pixels,
+    'angle'         : 10,
     
     'psf'           : psf_func,
     'psf_params'    : psf_params,
@@ -41,4 +42,5 @@ imaging_plane_params = {
 imaging_system = sisisim.Experiment(**atom_plane_params)
 imaging_system.addImagingPlane(**imaging_plane_params)
 imaging_system.save("setup50x50")
-imaging_system.sampleImages(1, save=False, plot=True, snr_inf=True)
+imaging_system.sampleImages(1, save=False, filling=0.5, plot=True, snr_inf=True)
+imaging_system.sampleImages(500, plot=False, filling=0.2, save=True, savename='imgs50x50_200ph')
