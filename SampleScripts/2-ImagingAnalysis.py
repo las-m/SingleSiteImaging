@@ -12,6 +12,6 @@ import matplotlib.pyplot as plt
 
 setup = sisisim.open_sim("setup50x50.pkl")
 
-setup.changeEmitter('poisson', mu=10000)
+setup.changeEmitter('poisson', mu=1000)
 
 setup.sampleImages(1, plot=True, filling=0.5)

@@ -24,7 +24,6 @@ psf_params = [1, 313e-9, 313e-9] #amp, w_x, w_y
 atom_plane_params = {
     'n_sites'    : n_sites,
     'spacing'    : 1064e-9/np.sqrt(2),
-    
     'pdist'      : 'poisson',
     'mu'         : 10000
     }
@@ -41,14 +40,5 @@ imaging_plane_params = {
 
 imaging_system = sisisim.Experiment(**atom_plane_params)
 imaging_system.addImagingPlane(**imaging_plane_params)
+imaging_system.save("setup50x50")
 imaging_system.sampleImages(1, save=False, plot=True, snr_inf=True)
-
-#%%
-
-# psf_disc = imaging_system.imaging_planes[0].psf_list
-# psf_call = imaging_system.imaging_planes[0].psf
-
-# x,y = np.meshgrid(np.linspace(-10e-6, 10e-6,100), np.linspace(-10e-6, 10e-6,100))
-# plt.figure()
-# plt.imshow(psf_call(x,y))
-# plt.colorbar()
