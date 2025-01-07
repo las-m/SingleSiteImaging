@@ -12,11 +12,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Atom plane parameters
-n_sites = 50 # n x n sites
+n_sites = 3 # n x n sites
 
 # Imaging parameters
 magnification = 50
-n_pixels = 200
+n_pixels = 30
 pixel_size = 6.5e-6
 psf_func = sisipy.psf_functions.gaussian_2d
 psf_params = [1, 313e-9, 313e-9] #amp, w_x, w_y
@@ -25,7 +25,8 @@ atom_plane_params = {
     'n_sites'    : n_sites,
     'spacing'    : 1064e-9/np.sqrt(2),
     'pdist'      : 'poisson',
-    'mu'         : 200
+    'mu'         : 100,
+    'phase'      : (2*np.pi/3,2*np.pi/3)
     }
 
 imaging_plane_params = {
@@ -41,6 +42,6 @@ imaging_plane_params = {
 
 imaging_system = sisisim.Experiment(**atom_plane_params)
 imaging_system.addImagingPlane(**imaging_plane_params)
-imaging_system.save("setup50x50")
-imaging_system.sampleImages(1, save=False, filling=0.5, plot=True, snr_inf=True)
-imaging_system.sampleImages(500, plot=False, filling=0.2, save=True, savename='imgs50x50_200ph')
+# imaging_system.save("setup50x50")
+imaging_system.sampleImages(1, save=False, filling=1, plot=True, snr_inf=True)
+# imaging_system.sampleImages(500, plot=False, filling=0.2, save=True, savename='imgs50x50_100ph_120deg_phase')

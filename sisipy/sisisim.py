@@ -75,7 +75,7 @@ def gen_imaging_plane(*imaging_plane_params, **imaging_plane_kwargs):
         raise ValueError("imaging_plane_params must be ImagingPlane, list, or None")
 
 class Lattice():
-    def __init__(self, n_sites, spacing, *emitter_args, **emitter_kwargs):
+    def __init__(self, n_sites, spacing, phase=(0,0), **emitter_kwargs):
         """
         Initialize a lattice structure with associated quantum emitters.
 
@@ -91,13 +91,15 @@ class Lattice():
             it will be used for all directions. If an array-like object is provided, 
             it should specify the lattice spacing in each direction.
 
+        phase   : float or array-like of float
+            Lattice phase. If a single float is provided, it will be used for
+            all directions. If an array-like object is provided, it should specify
+            the lattice phase in each direction.
+
         pdist : str, array-like, or rv_discrete
             Probability distribution for the emitter photon counts. Can be a string
             for predefined distributions (e.g., 'poisson'), an array-like object
             for custom discrete probabilities, or an `rv_discrete` instance.
-
-        *emitter_args : tuple
-            Additional positional arguments for the `Emitter` class.
 
         **emitter_kwargs : dict
             Additional keyword arguments for the `Emitter` class.
@@ -110,7 +112,7 @@ class Lattice():
         """
         n_sites_arr = np.atleast_1d(n_sites).astype(int).flatten()
         spacing_arr = np.atleast_1d(spacing).astype(float).flatten()
-        self.emitter = quantum_emitters.Emitter(*emitter_args, **emitter_kwargs)
+        self.emitter = quantum_emitters.Emitter(**emitter_kwargs)
 
         if len(n_sites_arr) == len(spacing_arr) and len(n_sites_arr) != 1:
             self.n_sites = n_sites_arr
@@ -123,14 +125,14 @@ class Lattice():
             self.n_sites = n_sites_arr.flatten()
             self.spacing = spacing_arr.flatten()
         else:
-            raise ValueError("Invalid dimensions")
+            raise ValueError("Dimension of n_sites must match dimensions of spacing")
 
         self.dim = len(self.n_sites)
+        self.phase = phase
         self.refreshCoordinates()
 
-
     def refreshCoordinates(self):
-        x = [np.arange(0, self.n_sites[i])*self.spacing[i]-(self.n_sites[i]-1)*self.spacing[i]/2 for i in range(self.dim)]
+        x = [np.arange(0, self.n_sites[i])*self.spacing[i]-(self.n_sites[i]-1+self.phase[0]/(np.pi))*self.spacing[i]/2 for i in range(self.dim)]
         x_mesh = np.meshgrid(*x)
         self.coords = [x_mesh[i].flatten() for i in range(self.dim)]
         return
